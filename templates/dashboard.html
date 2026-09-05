@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabelPro AI Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap"
+          rel="stylesheet">
+</head>
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <h2>🤖 LabelPro AI</h2>
+
+        <a href="#">🏠 Dashboard</a>
+        <a href="#">📚 My Courses</a>
+        <a href="#">🎯 Progress</a>
+        <a href="#">🏆 Certificates</a>
+        <a href="#">💼 AI Jobs</a>
+        <a href="#">⚙ Settings</a>
+
+        <a class="logout" href="/logout">🚪 Logout</a>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+
+        <!-- Welcome Banner -->
+        <section class="banner">
+            <div>
+                <h1>Welcome, {{ username }} 👋</h1>
+                <p>Continue your AI learning journey today.</p>
+            </div>
+
+            <button>Resume Learning</button>
+        </section>
+
+        <!-- Stats -->
+        <section class="stats">
+
+            <div class="card">
+                <span>📚</span>
+                <h2>6</h2>
+                <p>Courses Enrolled</p>
+            </div>
+
+            <div class="card">
+                <span>⏱</span>
+                <h2>14h</h2>
+                <p>Learning Hours</p>
+            </div>
+
+            <div class="card">
+                <span>🔥</span>
+                <h2>5 Days</h2>
+                <p>Current Streak</p>
+            </div>
+
+            <div class="card">
+                <span>🏆</span>
+                <h2>250 XP</h2>
+                <p>Experience Points</p>
+            </div>
+
+        </section>
+
+        <!-- Continue Learning -->
+        <section class="continue">
+
+            <div class="title">
+                <h2>Continue Learning</h2>
+            </div>
+
+            <div class="continue-card">
+
+                <h3>AI Data Annotation Mastery</h3>
+
+                <p>Lesson 8 of 24 • Bounding Boxes & Segmentation</p>
+
+                <div class="progress">
+                    <div class="fill" style="width:35%;"></div>
+                </div>
+
+                <small>35% Completed</small>
+
+            </div>
+
+        </section>
+
+        <!-- Courses -->
+        <section class="courses">
+
+            <div class="title">
+                <h2>Your Courses</h2>
+            </div>
+
+            <div class="course-grid">
+
+                <div class="course">
+                    <div class="icon">🏷️</div>
+                    <h3>AI Data Annotation</h3>
+                    <p>24 Lessons • Beginner</p>
+
+                    <a href="/course">
+    <button>Continue learning</button>
+ </a>
+</div>
+
+                <div class="course">
+                    <div class="icon">🤖</div>
+                    <h3>Prompt Engineering</h3>
+                    <p>18 Lessons • Trending</p>
+                    <button>Open Course</button>
+                </div>
+
+                <div class="course">
+                    <div class="icon">🐍</div>
+                    <h3>Python for AI</h3>
+                    <p>30 Lessons • Essential</p>
+                    <button>Open Course</button>
+                </div>
+
+                <div class="course">
+                    <div class="icon">⚡</div>
+                    <h3>AI Automation</h3>
+                    <p>22 Lessons • Projects</p>
+                    <button>Open Course</button>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>{{ course["title"] }} | LabelPro AI Academy</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/course-detail.css') }}">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet">
+```
+
+</head>
+
+<body>
+
+<div class="course-detail-page">
+
+```
+<!-- =========================
+     TOP NAVBAR
+========================== -->
+
+<header class="detail-navbar">
+
+    <div class="brand">
+        <span class="brand-icon">🤖</span>
+
+        <div>
+            <h1>LabelPro AI</h1>
+            <p>Academy</p>
+        </div>
+    </div>
+
+    <a href="{{ url_for('course') }}" class="back-btn">
+        ← All Courses
+    </a>
+
+</header>
+
+
+<!-- =========================
+     COURSE HERO
+========================== -->
+
+<section class="course-hero">
+
+    <div class="hero-content">
+
+        <span class="course-level">
+            {{ course["level"] }}
+        </span>
+
+        <h2>
+            {{ course["title"] }}
+        </h2>
+
+        <p class="hero-description">
+            {{ course["description"] }}
+        </p>
+
+        <div class="hero-meta">
+
+            <div class="meta-item">
+                <span class="meta-icon">⏱️</span>
+
+                <div>
+                    <small>Duration</small>
+                    <strong>{{ course["duration"] }}</strong>
+                </div>
+            </div>
+
+            <div class="meta-item">
+                <span class="meta-icon">🎓</span>
+
+                <div>
+                    <small>Level</small>
+                    <strong>{{ course["level"] }}</strong>
+                </div>
+            </div>
+
+            <div class="meta-item">
+                <span class="meta-icon">📚</span>
+
+                <div>
+                    <small>Learning</small>
+                    <strong>Practical</strong>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="hero-visual">
+
+        <div class="glow"></div>
+
+        <div class="robot">
+            🤖
+        </div>
+
+        <span class="floating floating-1">AI</span>
+        <span class="floating floating-2">DATA</span>
+        <span class="floating floating-3">SKILLS</span>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     MAIN CONTENT
+========================== -->
+
+<main class="course-main">
+
+    <!-- LEFT CONTENT -->
+
+    <div class="main-content">
+
+
+        <!-- OVERVIEW -->
+
+        <section class="content-card">
+
+            <div class="section-heading">
+
+                <span class="section-icon">
+                    📚
+                </span>
+
+                <div>
+                    <h3>Course Overview</h3>
+
+                    <p>
+                        Everything you need to know about this course.
+                    </p>
+                </div>
+
+            </div>
+
+            <p class="overview-text">
+
+                Welcome to
+                <strong>{{ course["title"] }}</strong>.
+
+                This course is designed to help you develop
+                practical, job-focused skills through structured
+                learning, real-world examples and hands-on practice.
+
+            </p>
+
+        </section>
+
+
+        <!-- LESSONS -->
+
+        <section class="content-card">
+
+            <div class="section-heading">
+
+                <span class="section-icon">
+                    🎓
+                </span>
+
+                <div>
+                    <h3>Course Lessons</h3>
+
+                    <p>
+                        Follow the lessons step by step.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="lesson-list">
+
+
+                <!-- LESSON 1 -->
+
+                <div class="lesson">
+
+                    <div class="lesson-number">
+                        01
+                    </div>
+
+                    <div class="lesson-info">
+
+                        <span class="lesson-label">
+                            LESSON 01
+                        </span>
+
+                        <h4>
+                            Introduction
+                        </h4>
+
+                        <p>
+                            Understand the basics and introduction
+                            to {{ course["title"] }}.
+                        </p>
+
+                    </div>
+
+                    <button class="lesson-btn">
+                        Start →
+                    </button>
+
+                </div>
+
+
+                <!-- LESSON 2 -->
+
+                <div class="lesson">
+
+                    <div class="lesson-number">
+                        02
+                    </div>
+
+                    <div class="lesson-info">
+
+                        <span class="lesson-label">
+                            LESSON 02
+                        </span>
+
+                        <h4>
+                            Fundamentals
+                        </h4>
+
+                        <p>
+                            Learn the fundamental concepts,
+                            tools and techniques.
+                        </p>
+
+                    </div>
+
+                    <button class="lesson-btn">
+                        Start →
+                    </button>
+
+                </div>
+
+
+                <!-- LESSON 3 -->
+
+                <div class="lesson locked">
+
+                    <div class="lesson-number">
+                        🔒
+                    </div>
+
+                    <div class="lesson-info">
+
+                        <span class="lesson-label">
+                            LESSON 03
+                        </span>
+
+                        <h4>
+                            Practical Project
+                        </h4>
+
+                        <p>
+                            Apply your knowledge through a
+                            practical real-world project.
+                        </p>
+
+                    </div>
+
+                    <button class="lesson-btn locked-btn"
+                            disabled>
+                        Locked
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- RIGHT SIDEBAR -->
+
+    <aside class="course-sidebar">
+
+        <div class="start-card">
+
+            <div class="start-icon">
+                🚀
+            </div>
+
+            <h3>
+                Ready to Start?
+            </h3>
+
+            <p>
+                Start learning {{ course["title"] }}
+                and build practical skills.
+            </p>
+
+            <button class="start-learning-btn">
+                Start Learning
+                <span>→</span>
+            </button>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <h4>
+                What you'll get
+            </h4>
+
+            <div class="benefit">
+                <span>✓</span>
+                <p>Structured lessons</p>
+            </div>
+
+            <div class="benefit">
+                <span>✓</span>
+                <p>Practical learning</p>
+            </div>
+
+            <div class="benefit">
+                <span>✓</span>
+                <p>Job-focused skills</p>
+            </div>
+
+            <div class="benefit">
+                <span>✓</span>
+                <p>Hands-on projects</p>
+            </div>
+
+        </div>
+
+    </aside>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer class="detail-footer">
+
+    <p>
+        © 2026 LabelPro AI Academy
+    </p>
+
+    <span>
+        Learn. Practice. Build.
+    </span>
+
+</footer>
+```
+
+</div>
+
+</body>
+
+</html>

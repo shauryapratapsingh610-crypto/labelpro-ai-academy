@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Courses | LabelPro AI</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/course.css') }}">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet">
+```
+
+</head>
+
+<body>
+
+<div class="course-page">
+
+```
+<!-- TOP BAR -->
+<header class="top-bar">
+
+    <a href="{{ url_for('dashboard') }}" class="back-btn">
+        ← Dashboard
+    </a>
+
+    <div class="user">
+        Welcome, {{ username }}
+    </div>
+
+</header>
+
+
+<!-- MAIN CONTENT -->
+<main class="course-container">
+
+    <!-- PAGE HEADER -->
+    <section class="course-header">
+
+        <span class="badge">
+            AI Learning Academy
+        </span>
+
+        <h1>
+            Explore Our Courses
+        </h1>
+
+        <p>
+            Learn AI data annotation and other professional skills
+            through practical, job-focused courses.
+        </p>
+
+    </section>
+
+
+    <!-- COURSES -->
+    {% if courses %}
+
+    <div class="courses-grid">
+
+        {% for course in courses %}
+
+        <div class="course-card">
+
+            <!-- COURSE ICON -->
+            <div class="course-icon">
+                🤖
+            </div>
+
+
+            <!-- COURSE INFORMATION -->
+            <div class="course-info">
+
+                <span class="level">
+                    {{ course["level"] }}
+                </span>
+
+                <h3>
+                    {{ course["title"] }}
+                </h3>
+
+                <p>
+                    {{ course["description"] }}
+                </p>
+
+
+                <!-- COURSE META -->
+                <div class="course-meta">
+
+                    <span>
+                        ⏱️ {{ course["duration"] }}
+                    </span>
+
+                    <span>
+                        🎓 {{ course["level"] }}
+                    </span>
+
+                </div>
+
+
+                <!-- START COURSE -->
+                <a
+                    href="{{ url_for('course_detail', course_id=course['id']) }}"
+                    class="start-course-btn"
+                >
+                    Start Course →
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    {% else %}
+
+    <!-- NO COURSES -->
+    <div class="no-courses">
+
+        <div class="empty-icon">
+            📚
+        </div>
+
+        <h3>
+            No Courses Available Yet
+        </h3>
+
+        <p>
+            New courses will be added soon.
+            Please check back later.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+</main>
+```
+
+</div>
+
+<!-- JAVASCRIPT -->
+
+<script src="{{ url_for('static', filename='js/course.js') }}"></script>
+
+</body>
+
+</html>

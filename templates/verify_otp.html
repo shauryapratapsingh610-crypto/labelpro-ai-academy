@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Verify Email | LabelPro AI</title>
+<style>*{box-sizing:border-box;font-family:Inter,Arial,sans-serif}body{min-height:100vh;display:flex;justify-content:center;align-items:center;background:#050816;color:#fff} .card{width:420px;padding:35px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:20px}h1{text-align:center}p{text-align:center;color:#9ca3af;line-height:1.6}input{width:100%;padding:14px;border:0;border-radius:10px;background:#111827;color:#fff;margin-top:12px;letter-spacing:5px;text-align:center;font-size:20px}button{width:100%;margin-top:20px;padding:14px;border:0;border-radius:10px;background:linear-gradient(90deg,#6C63FF,#00D4FF);color:#fff;font-weight:700;cursor:pointer}.bottom{text-align:center;margin-top:18px;color:#9ca3af;font-size:14px}.bottom a{color:#8b82ff;text-decoration:none}.flash{padding:10px;border-radius:8px;margin-bottom:15px;background:#7f1d1d;text-align:center}</style></head>
+<body><div class="card"><h1>📧 Verify Email</h1><p>We sent a 6-digit OTP to<br><strong>{{ email }}</strong></p>
+{% with messages=get_flashed_messages(with_categories=true) %}{% for category,message in messages %}<div class="flash">{{ message }}</div>{% endfor %}{% endwith %}
+<form method="POST"><input name="otp" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="000000" required><button type="submit">Verify Email</button></form>
+<div class="bottom"><form method="POST" action="/resend-verification"><button type="submit" style="background:transparent;margin-top:0;color:#8b82ff">Resend OTP</button></form></div>
+<div class="bottom"><a href="/login">Back to Login</a></div></div></body></html>
