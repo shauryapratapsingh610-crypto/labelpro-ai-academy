@@ -10,11 +10,12 @@ from flask import (
 
 import os
 import sqlite3
-import smtplib
+import json
+from urllib.request import Request, urlopen
+from urllib.error import HTTPError, URLError
 import secrets
 import hashlib
 import traceback
-from email.message import EmailMessage
 from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
@@ -54,20 +55,18 @@ app.config.update(
 # EMAIL / OTP CONFIGURATION
 # =========================================================
 
-SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
-SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
-SMTP_USERNAME = os.getenv("SMTP_USERNAME", "")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
-SMTP_FROM = os.getenv("SMTP_FROM", SMTP_USERNAME)
+# Render Free blocks outbound SMTP ports (25/465/587), so OTP emails
+# are sent through an HTTPS email API instead of Gmail SMTP.
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
+RESEND_FROM = os.getenv("RESEND_FROM", "")
 
 OTP_EXPIRY_MINUTES = 10
 OTP_RESEND_SECONDS = 60
 
-if not SMTP_USERNAME or not SMTP_PASSWORD:
+if not RESEND_API_KEY or not RESEND_FROM:
     print(
-        "WARNING: SMTP_USERNAME / SMTP_PASSWORD are not set. "
-        "OTP emails will fail until these are configured in your .env file. "
-        "See .env.example for the required variables."
+        "WARNING: RESEND_API_KEY / RESEND_FROM are not set. "
+        "OTP emails will fail until these are configured in Render Environment."
     )
 
 
@@ -80,8 +79,10 @@ def generate_otp():
 
 
 def send_otp_email(to_email, otp, purpose="verification"):
-    if not SMTP_USERNAME or not SMTP_PASSWORD:
-        raise RuntimeError("SMTP credentials are not configured on the server.")
+    if not RESEND_API_KEY or not RESEND_FROM:
+        raise RuntimeError(
+            "Email API is not configured. Set RESEND_API_KEY and RESEND_FROM."
+        )
 
     if purpose == "verification":
         subject = "Verify your LabelPro AI Academy account"
@@ -92,32 +93,51 @@ def send_otp_email(to_email, otp, purpose="verification"):
         title = "Password reset code"
         message = "Use this OTP to reset your LabelPro AI Academy password."
 
-    email = EmailMessage()
-    email["Subject"] = subject
-    email["From"] = SMTP_FROM or SMTP_USERNAME
-    email["To"] = to_email
-    email.set_content(
-        f"{title}\n\n{message}\n\n"
+    text_body = (
+        f"{title}\n\n"
+        f"{message}\n\n"
         f"Your OTP is: {otp}\n\n"
         f"This code expires in {OTP_EXPIRY_MINUTES} minutes.\n"
         "If you did not request this, you can ignore this email."
     )
 
+    payload = {
+        "from": RESEND_FROM,
+        "to": [to_email],
+        "subject": subject,
+        "text": text_body,
+    }
+
+    request = Request(
+        "https://api.resend.com/emails",
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {RESEND_API_KEY}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+
     try:
-        with smtplib.SMTP(SMTP_HOST, SMTP_PORT, timeout=20) as server:
-            server.starttls()
-            server.login(SMTP_USERNAME, SMTP_PASSWORD)
-            server.send_message(email)
+        with urlopen(request, timeout=20) as response:
+            response_body = response.read().decode("utf-8", errors="replace")
+            if response.status < 200 or response.status >= 300:
+                raise RuntimeError(
+                    f"Email API returned HTTP {response.status}: {response_body}"
+                )
+    except HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")
+        print("EMAIL API HTTP ERROR:", e.code, body)
+        raise RuntimeError(f"Email API error {e.code}: {body}") from e
+    except (URLError, TimeoutError, OSError) as e:
+        print("EMAIL API NETWORK ERROR:", e)
+        raise RuntimeError(f"Could not reach email API: {e}") from e
     except Exception:
-        # Print the full traceback so the real cause (bad host/port,
-        # wrong credentials, blocked login, etc.) shows up in the
-        # server console instead of a vague error.
-        print("SMTP SEND FAILED:")
+        print("EMAIL API SEND FAILED:")
         traceback.print_exc()
         raise
 
     print(f"OTP email sent successfully to {to_email} ({purpose})")
-
 
 def send_new_otp(email, purpose):
     otp = generate_otp()
@@ -582,7 +602,7 @@ def register():
                 # Keep the account so it can be verified by resend later.
                 flash(
                     "Account created, but the verification email could not be sent. "
-                    "Please check SMTP settings and use resend verification.",
+                    "Please check the email service settings and use resend verification.",
                     "danger"
                 )
                 return redirect(url_for("verify_email"))
@@ -1536,7 +1556,6 @@ def course_detail(course_id):
 # ADMIN LOGOUT
 # =========================================================
 
-@app.route("/admin/logout")
 @app.route("/logout")
 def logout():
 
