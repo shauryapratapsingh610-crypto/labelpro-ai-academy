@@ -1224,6 +1224,53 @@ def admin_dashboard():
 
 
 # =========================================================
+# ADMIN DELETE USER
+# =========================================================
+
+@app.route("/admin/user/<int:user_id>/delete", methods=["POST"])
+def admin_delete_user(user_id):
+    if not session.get("admin"):
+        return redirect(url_for("admin"))
+
+    conn = get_db()
+
+    try:
+        if using_postgresql():
+            user = conn.execute(
+                "SELECT id, name, email FROM users WHERE id = %s",
+                (user_id,)
+            ).fetchone()
+        else:
+            user = conn.execute(
+                "SELECT id, name, email FROM users WHERE id = ?",
+                (user_id,)
+            ).fetchone()
+
+        if not user:
+            flash("User not found.", "warning")
+            return redirect(url_for("admin_dashboard"))
+
+        if using_postgresql():
+            conn.execute("DELETE FROM users WHERE id = %s", (user_id,))
+        else:
+            conn.execute("DELETE FROM users WHERE id = ?", (user_id,))
+
+        conn.commit()
+
+        flash(f"User {user['email']} deleted successfully.", "success")
+
+    except Exception as e:
+        conn.rollback()
+        print("ADMIN DELETE USER ERROR:", e)
+        flash("Could not delete the user. Please try again.", "danger")
+
+    finally:
+        conn.close()
+
+    return redirect(url_for("admin_dashboard"))
+
+
+# =========================================================
 # ADMIN ADD LESSON
 # =========================================================
 
@@ -1579,5 +1626,7 @@ def logout():
 if __name__ == "__main__":
 
     app.run(
-        debug=True
+        host="0.0.0.0",
+        port=int(os.getenv("PORT", "5000")),
+        debug=False
     )

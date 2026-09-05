@@ -603,7 +603,7 @@
 
             border-collapse: collapse;
 
-            min-width: 700px;
+            min-width: 800px;
         }
 
 
@@ -1430,6 +1430,8 @@
 
                         <th>Joined</th>
 
+                        <th>Action</th>
+
                     </tr>
 
                 </thead>
@@ -1484,6 +1486,18 @@
 
                         <td>
                             {{ student["created_at"] }}
+                        </td>
+
+                        <td>
+                            <form method="POST"
+                                  action="{{ url_for('admin_delete_user', user_id=student['id']) }}"
+                                  onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.');"
+                                  style="margin:0;">
+                                <button type="submit"
+                                        style="border:none; padding:8px 12px; border-radius:8px; background:#dc2626; color:white; font-size:12px; font-weight:700; cursor:pointer;">
+                                    🗑️ Delete
+                                </button>
+                            </form>
                         </td>
 
                     </tr>
